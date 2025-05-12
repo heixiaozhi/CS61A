@@ -124,6 +124,20 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    # left_total_mass = total_mass(end(left(m)))
+    # right_total_mass = total_mass(end(right(m)))
+    # left_length = length(left(m))
+    # right_length = length(right(m))
+    # # 判断扭矩是否相等
+    # if left_length * left_total_mass != right_length * right_total_mass:
+    #     return False
+    # # 如果子arm挂载的是mobile就递归判断
+    # if is_mobile(end(left(m))):
+    #     return balanced(end(left(m))) and balanced(end(right(m)))
+    # # 否则就为True
+    # return True
+    if is_planet(m):
+        return True
     left_total_mass = total_mass(end(left(m)))
     right_total_mass = total_mass(end(right(m)))
     left_length = length(left(m))
@@ -131,11 +145,7 @@ def balanced(m):
     # 判断扭矩是否相等
     if left_length * left_total_mass != right_length * right_total_mass:
         return False
-    # 如果子arm挂载的是mobile就递归判断
-    if is_mobile(end(left(m))):
-        return balanced(end(left(m))) and balanced(end(right(m)))
-    # 否则就为True
-    return True
+    return balanced(end(left(m))) and balanced(end(right(m)))
 
 
 def berry_finder(t):
@@ -156,12 +166,18 @@ def berry_finder(t):
     True
     """
     "*** YOUR CODE HERE ***"
+    # if label(t) == "berry":
+    #     return True
+    # ans = []
+    # for b in branches(t):
+    #     ans.append(berry_finder(b))
+    # return len(list(filter(lambda x: x == True, ans))) != 0
     if label(t) == "berry":
         return True
-    ans = []
     for b in branches(t):
-        ans.append(berry_finder(b))
-    return len(list(filter(lambda x: x == True, ans))) != 0
+        if berry_finder(b):
+            return True
+    return False
 
 
 HW_SOURCE_FILE = __file__
@@ -177,12 +193,15 @@ def max_path_sum(t):
     17
     """
     "*** YOUR CODE HERE ***"
+    # if is_leaf(t):
+    #     return label(t)
+    # ans = []
+    # for b in branches(t):
+    #     ans.append(max_path_sum(b))
+    # return label(t) + max(ans)
     if is_leaf(t):
         return label(t)
-    ans = []
-    for b in branches(t):
-        ans.append(max_path_sum(b))
-    return label(t) + max(ans)
+    return label(t) + max([max_path_sum(b) for b in branches(t)])
 
 
 def mobile(left, right):
